@@ -10,7 +10,7 @@ import MarkersList from './components/MarkersList';
 function App() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<DataInterface[]>([]);
-  const matches = useMediaQuery('(min-width:992px)');
+  const matches = useMediaQuery('(min-width:992px)', { noSsr: true });
 
   useEffect(() => {
     const dataSet = localStorage.getItem('dataSet');
