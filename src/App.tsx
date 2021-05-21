@@ -13,8 +13,8 @@ function App() {
   const matches = useMediaQuery('(min-width:600px)');
 
   useEffect(() => {
-    const d = localStorage.getItem('dataSet');
-    if (d !== null) setData(JSON.parse(d));
+    const dataSet = localStorage.getItem('dataSet');
+    if (dataSet !== null) setData(JSON.parse(dataSet));
   }, []);
 
   const addData = (newData: DataInterface) => {
