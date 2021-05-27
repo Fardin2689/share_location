@@ -1,12 +1,12 @@
 import { LatLngExpression } from 'leaflet';
 import { useRef, useMemo } from 'react';
 import { Marker, Popup } from 'react-leaflet';
-import { getIcon } from './Icons';
+import { getIcon } from './getIcons';
 
 type propsType = {
   position: LatLngExpression;
-  setPosition: React.Dispatch<React.SetStateAction<number[]>>;
-  markerType?: number | unknown; //DivIcon | Icon<IconOptions> | undefined;
+  setPosition: React.Dispatch<React.SetStateAction<LatLngExpression>>;
+  markerType?: number;
 };
 
 function DraggableMarker({ position, setPosition, markerType = 1 }: propsType) {

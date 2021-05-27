@@ -1,38 +1,46 @@
 import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Map from './Map';
+import { Button, TextField, Dialog } from '@material-ui/core';
+import { DialogActions, DialogContent } from '@material-ui/core';
+import { DialogContentText, DialogTitle } from '@material-ui/core';
+import { MenuItem, Select, InputLabel } from '@material-ui/core';
+import { FormControl, Grid } from '@material-ui/core';
 import DraggableMarker from './DraggableMarker';
 import { v1 as uuidv1 } from 'uuid';
-import { Grid } from '@material-ui/core';
+import { useContext } from 'react';
+import Map from './Map';
+import DataContext from '../context/DataContext';
+import { LatLngExpression } from 'leaflet';
+import DataInterface from '../interfaces/data.interface';
 
 type propsType = {
   open: boolean;
-  handleClose: any;
-  addData: (newData: any) => void;
+  handleClose: () => void;
 };
 const initialValue = { locName: '', details: '', locType: 1 };
 
-function FormDialog({ open, handleClose, addData }: propsType) {
+function FormDialog({ open, handleClose }: propsType) {
   const [data, setData] = useState(initialValue);
-  const [position, setPosition] = useState<any>([51.505, -0.09]);
+  const [position, setPosition] = useState<LatLngExpression>([51.505, -0.09]);
+  const context = useContext(DataContext);
 
   const handleChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const handleSave = () => {
-    const { locName, details, locType } = data;
-    addData({ id: uuidv1(), locName, details, locType, position });
+    if (context === null) return;
+    const newData: DataInterface = {
+      id: uuidv1(),
+      locName: data.locName,
+      details: data.details,
+      locType: data.locType,
+      position,
+    };
+    const newDataSet = [...context.data, newData];
+
+    context.setData(newDataSet);
+    localStorage.setItem('dataSet', JSON.stringify(newDataSet));
+
     handleCancel();
   };
 
@@ -89,11 +97,11 @@ function FormDialog({ open, handleClose, addData }: propsType) {
           onChange={handleChange}
         />
 
-        <Map height={'200px'} center={[51.505, -0.09]}>
+        <Map height={'200px'}>
           <DraggableMarker
             position={position}
             setPosition={setPosition}
-            markerType={data.locType || 1}
+            markerType={data.locType}
           />
         </Map>
       </DialogContent>

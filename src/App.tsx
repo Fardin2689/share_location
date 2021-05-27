@@ -17,12 +17,6 @@ function App() {
     if (dataSet !== null) setData(JSON.parse(dataSet));
   }, []);
 
-  const addData = (newData: DataInterface) => {
-    const newDataSet = [...data, newData];
-    setData(newDataSet);
-    localStorage.setItem('dataSet', JSON.stringify(newDataSet));
-  };
-
   if (!matches)
     return (
       <div
@@ -41,17 +35,13 @@ function App() {
 
   return (
     <DataContext.Provider value={{ data, setData }}>
-      <Map height={'100vh'} center={[51.505, -0.09]}>
+      <Map height={'100vh'}>
         <>
           <MarkersList />
           <ButtonControl handleOpen={() => setOpen(true)} />
         </>
       </Map>
-      <FormDialog
-        open={open}
-        handleClose={() => setOpen(false)}
-        addData={addData}
-      />
+      <FormDialog open={open} handleClose={() => setOpen(false)} />
     </DataContext.Provider>
   );
 }

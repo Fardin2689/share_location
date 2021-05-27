@@ -1,16 +1,16 @@
-import { LatLngExpression } from "leaflet";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { LatLngExpression } from 'leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 type propsType = {
   height: string;
-  center: LatLngExpression | undefined;
+  center?: LatLngExpression | undefined;
   children?: JSX.Element | never[];
 };
 
-function Map({ height, center, children }: propsType) {
+function Map({ height, center = [51.505, -0.09], children }: propsType) {
   return (
     <MapContainer
-      style={{ height: height, width: "100%" }}
+      style={{ height: height, width: '100%' }}
       center={center}
       zoom={13}
       scrollWheelZoom={false}
